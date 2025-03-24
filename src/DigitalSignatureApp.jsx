@@ -108,14 +108,21 @@ function DigitalSignatureApp() {
     ctx.lineJoin = 'round';
   }, []);
 
+  const getCoordinates = (e, canvas) => {
+    const rect = canvas.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    
+    return {
+      x: (clientX - rect.left) * (canvas.width / rect.width),
+      y: (clientY - rect.top) * (canvas.height / rect.height)
+    };
+  };
+
   const startDrawing = (e) => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    const rect = canvas.getBoundingClientRect();
-    
-    // Get the correct mouse position relative to the canvas
-    const x = (e.clientX - rect.left) * (canvas.width / rect.width);
-    const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+    const { x, y } = getCoordinates(e, canvas);
     
     setIsDrawing(true);
     ctx.beginPath();
@@ -127,11 +134,7 @@ function DigitalSignatureApp() {
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    const rect = canvas.getBoundingClientRect();
-    
-    // Get the correct mouse position relative to the canvas
-    const x = (e.clientX - rect.left) * (canvas.width / rect.width);
-    const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+    const { x, y } = getCoordinates(e, canvas);
     
     ctx.lineTo(x, y);
     ctx.stroke();
@@ -221,6 +224,9 @@ function DigitalSignatureApp() {
                 onMouseMove={draw}
                 onMouseUp={endDrawing}
                 onMouseLeave={endDrawing}
+                onTouchStart={startDrawing}
+                onTouchMove={draw}
+                onTouchEnd={endDrawing}
                 style={{
                   background: 'white',
                   cursor: 'crosshair',
