@@ -204,7 +204,7 @@ function DigitalSignatureApp() {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     
-    // Save the current canvas state
+    // Save the current canvas content
     const tempCanvas = document.createElement('canvas');
     tempCanvas.width = canvas.width;
     tempCanvas.height = canvas.height;
@@ -308,6 +308,24 @@ function DigitalSignatureApp() {
                     max="10"
                     value={lineWidth}
                     onChange={handleWidthChange}
+                    className="w-full h-3 sm:h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                  />
+                </div>
+
+                {/* Rotation Control */}
+                <div className="space-y-3 sm:space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-base sm:text-sm font-medium text-gray-700">
+                      Rotation
+                    </label>
+                    <span className="text-base sm:text-sm text-gray-500">{angle}°</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="360"
+                    value={angle}
+                    onChange={(e) => rotateCanvas(parseInt(e.target.value))}
                     className="w-full h-3 sm:h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-500"
                   />
                 </div>
